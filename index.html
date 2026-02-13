@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Tempi Railway Tragedy</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e74c3c;
+            --bg: #f8f9fa;
+            --text: #333;
+            --line-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .main-tabs {
+            display: flex;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-tab-btn {
+            padding: 20px 40px;
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #7f8c8d;
+            cursor: pointer;
+            border-bottom: 4px solid transparent;
+            transition: 0.3s;
+        }
+
+        .main-tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .main-tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--accent);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .search-wrapper {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #searchInput {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-view {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .sub-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-btn {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #555;
+            transition: 0.2s;
+        }
+
+        .sub-tab-btn:hover {
+            background: #eee;
+        }
+
+        .sub-tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* TIMELINE CSS */
+        .timeline-section {
+            display: none;
+            position: relative;
+            padding-left: 0;
+        }
+
+        .timeline-section.active {
+            display: block;
+        }
+
+        /* The Vertical Line */
+        .timeline-section::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            bottom: 0;
+            left: 160px;
+            width: 4px;
+            background: var(--line-color);
+            border-radius: 2px;
+        }
+
+        .section-title {
+            margin-left: 190px;
+            color: var(--primary);
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* YEAR HEADER STYLE */
+        .year-header {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #bdc3c7;
+            /* Subtle color matching line */
+            margin: 40px 0 20px 0;
+            padding-left: 120px;
+            /* Near line */
+            position: relative;
+        }
+
+        /* Dot for year */
+        .year-header {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #c6803a;
+            margin: 40px 0 20px 0;
+            width: 130px;
+            text-align: right;
+            padding-right: 30px;
+            padding-left: 0;
+
+            position: relative;
+        }
+        .day-header {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #c6803a;
+            margin: 30px 0 35px 0;
+            text-align: left;
+            padding-right: 100px;
+            padding-left:200px;
+
+            position: relative;
+        }
+        .timeline-row {
+            display: flex;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .t-date {
+            width: 130px;
+            text-align: right;
+            padding-right: 30px;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 0.95rem;
+            padding-top: 15px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+
+        .timeline-row::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            left: 150px;
+            /* <--- CHANGED FROM 154px TO 150px */
+            top: 18px;
+            z-index: 10;
+        }
+
+        .timeline-row.crash-row::after {
+            border-color: var(--accent);
+            background: var(--accent);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-left: 30px;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid white;
+        }
+
+        .timeline-row.crash-row .timeline-content {
+            border-left: 4px solid var(--accent);
+            background: #fff5f5;
+        }
+
+        .timeline-row.crash-row .timeline-content::before {
+            border-right-color: #fff5f5;
+        }
+
+        .cite-ref {
+            font-size: 0.75em;
+            color: var(--accent);
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 3px;
+            text-decoration: none;
+        }
+
+        .cite-ref:hover {
+            text-decoration: underline;
+        }
+
+        .sources-list ul {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .sources-list li {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .source-num {
+            color: var(--accent);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .sources-list a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .timeline-section::before {
+                left: 19px;
+                top: 50px;
+            }
+
+            .section-title {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .year-header {
+                padding-left: 40px;
+                font-size: 1.5rem;
+                margin-top: 20px;
+            }
+
+            .year-header::after {
+                left: 15px;
+                top: 12px;
+            }
+            .day-header{
+                padding-left: 40px;
+                font-size: 1.2rem;
+                margin-top: 10px;
+            }
+            .day-header::after {
+                left: 15px;
+                top: 12px;
+            }s
+            .timeline-row {
+                flex-direction: column;
+                margin-bottom: 40px;
+            }
+
+            .t-date {
+                width: auto;
+                text-align: left;
+                margin-left: 45px;
+                margin-bottom: 5px;
+                padding-top: 0;
+                padding-right: 0;
+            }
+
+            .timeline-row::after {
+                left: 13px;
+                top: 4px;
+            }
+
+            .timeline-content {
+                margin-left: 40px;
+            }
+
+            .timeline-content::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>The Tempi Railway Tragedy</h1>
+        <p>Chronicle of Events & Official Records</p>
+    </header>
+
+    <div class="main-tabs">
+        <button class="main-tab-btn active" onclick="openMainTab('timeline', this)">Timeline</button>
+        <button class="main-tab-btn" onclick="openMainTab('sources', this)">Sources</button>
+    </div>
+
+    <div class="container">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" onkeyup="filterContent()"
+                placeholder="Search for events, names, or sources...">
+        </div>
+
+        <div id="timeline" class="tab-view active">
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" onclick="openSubTab(0, this)">Before The Crash</button>
+                <button class="sub-tab-btn" onclick="openSubTab(1, this)">The Crash</button>
+                <button class="sub-tab-btn" onclick="openSubTab(2, this)">Immediate On-site Developments</button>
+                <button class="sub-tab-btn" onclick="openSubTab(3, this)">Immediate Off-site Developments</button>
+                <button class="sub-tab-btn" onclick="openSubTab(4, this)">Further Developments (2023-2025)</button>
+                <button class="sub-tab-btn" onclick="openSubTab(5, this)">Technical Reports</button>
+            </div>
+            <div id="sec-0" class="timeline-section active">
+                <h2 class="section-title">Before The Crash</h2>
+                <div class="year-header">2014</div>
+                <div class="timeline-row ">
+                    <span class="t-date">September 26</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            Contract 717 for restoration of Signaling and Telecommand System is signed between ERGOSE
+                            (State owned infrastructure company) and a consortium (TOMI ABETE-Alstom Transport SA). The
+                            budget was 41.3 million euros and completion deadline was 2016. Supplementary Contract of
+                            13.3 million euros was signed in 2021. The project remains unfinished to date.
+                            <sup class="cite-ref" onclick="goToSource(1)">[1]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="year-header">2017</div>
+                <div class="timeline-row ">
+                    <span class="t-date">2017</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            TRAINOSE (transport services company) is privatized and sold to Ferrovie Dello Stato
+                            Italiane S.p.A. (FSI). OSE remains a state entity responsible for infrastructure.
+                            <sup class="cite-ref" onclick="goToSource(2)">[2]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="year-header">2019</div>
+                <div class="timeline-row ">
+                    <span class="t-date">July 29</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            Telecommand System in Larissa is destroyed due to a fire but not restored. Thereafter,
+                            manual routing of the trains by the Stationmaster takes place.
+                            <sup class="cite-ref" onclick="goToSource(3)">[3]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="year-header">2021</div>
+                <div class="timeline-row ">
+                    <span class="t-date">September 06</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            Philippos Tsalidis, CEO of TRAINOSE, sends confidential letter to OSE and to the Ministry of
+                            Infrastructure and Transport warning of the danger of a “severe incident” on the railway.
+                            <sup class="cite-ref" onclick="goToSource(4)">[4]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">September 14</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            Philippos Tsalidis resigns from the CEO position of TRAINOSE.
+                            <sup class="cite-ref" onclick="goToSource(5)">[5]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="year-header">2022</div>
+                <div class="timeline-row ">
+                    <span class="t-date">July</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            TRAINOSE is renamed Hellenic Train.
+                            <sup class="cite-ref" onclick="goToSource(6)">[6]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="year-header">2023</div>
+                <div class="timeline-row ">
+                    <span class="t-date">February 07</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            Democratic Unitary Trade Union Movement of Railways (DESK-S) issues a statement explicitly
+                            mentioning the possibility of an accident due to omissions in network safety measures.
+                            <sup class="cite-ref" onclick="goToSource(7)">[7]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 15</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            European Commission refers Greece to the Court of Justice of the EU for failure to comply
+                            with rules on Railway transport.
+                            <sup class="cite-ref" onclick="goToSource(8)">[8]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 20</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            During a speech in the Plentary of the Parliament, Minister of Infrastructure and Transport
+                            Kostas Karamanlis states that there are no safety concerns regarding the railway, dismissing
+                            the questioning of safety of the railways as “shameful”.
+                            <sup class="cite-ref" onclick="goToSource(9)">[9]</sup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sec-1" class="timeline-section ">
+                <h2 class="section-title">The Crash</h2>
+                <div class="day-header">February 28, 2023</div>
+                <div class="timeline-row ">
+                    <span class="t-date">19:22</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            Passenger train IC62 of Hellenic Train, departs from Athens to Thessaloniki.
+                            <sup class="cite-ref" onclick="goToSource(10)">[10]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">21:40</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            Freight Train 63503 of Hellenic Train departs from Thessaloniki to OSE freight station in
+                            Athens.
+                            <sup class="cite-ref" onclick="goToSource(11)">[11]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">23:04</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            IC62, departs from Larissa station.
+                            <sup class="cite-ref" onclick="goToSource(12)">[12]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row crash-row">
+                    <span class="t-date">23:06</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            IC62 enters the opposite line.
+                            <sup class="cite-ref" onclick="goToSource(12)">[12]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row crash-row">
+                    <span class="t-date">23:21</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            IC62, after moving on the opposite lane for 17 minutes, collides head on with freight train
+                            63503 near Tempi. Immediately, a massive explosion creates a fireball and fire spreads.
+                            <sup class="cite-ref" onclick="goToSource(13)">[13]</sup><sup class="cite-ref"
+                                onclick="goToSource(14)">[14]</sup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sec-2" class="timeline-section">
+                <h2 class="section-title">Immediate Developments on the Accident Site</h2>
+                <div class="year-header">2023</div>
+
+                <div class="timeline-row">
+                    <span class="t-date">March 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Heavy machinery arrives at the site and helps with the aid Rescue Efforts.
+                            Removal of topsoil and debris takes place.
+                            <sup class="cite-ref" onclick="goToSource(15)">[15]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 2</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The last 8 wagons of freight train 63503, which had not derailed, are sent
+                            back to Thessaloniki.
+                            <sup class="cite-ref" onclick="goToSource(15)">[15]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 2</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Trucks begin to remove soil and debris from the accident site and move them
+                            to a designated area at the OSE depot in position Koulouri as well as in a private lot in
+                            position Pigadia.
+                            <sup class="cite-ref" onclick="goToSource(16)">[16]</sup>
+                            <sup class="cite-ref" onclick="goToSource(17)">[17]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 3</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Meeting between Regional Governor of Thessaly Kostas Agorastos, Deputy
+                            Minister to the Prime Minister Christos Triantopoulos, General Secretary of the Ministry of
+                            Infrastructure and Transport Ioannis Xifiaras, General Secretary of the Ministry of Civil
+                            Protection, Vassilis Papageorgiou along with senior officers of the Hellenic Police and Fire
+                            Service and Representative of Hellenic Train takes place. They decided on the complete
+                            reconfiguration of the accident site citing the resumption of Railway Services.
+                            <sup class="cite-ref" onclick="goToSource(18)">[18]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 3</span>
+                    <div class="timeline-content">
+                        <div class="t-text">General Secretary of the Ministry of Infrastructure and Transport Ioannis
+                            Xifiaras informs Hellenic Train executive that “the damaged rolling stock must be removed as
+                            soon as possible” so that at least one of the railway track could be delivered to OSE by the
+                            6th of February.
+                            <sup class="cite-ref" onclick="goToSource(15)">[15]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 3</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Fire Service’s investigation on the cause of the fire is considered
+                            completed, and they depart from the accident site.
+                            <sup class="cite-ref" onclick="goToSource(19)">[19]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 4</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The ground in the accident site is excavated in significant depth, filled
+                            with gravel and covered with concrete.
+                            <sup class="cite-ref" onclick="goToSource(20)">[20]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 4</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The wreckage of the freight train’s second engine is moved to Koulouri
+                            without forensic examination.
+                            <sup class="cite-ref" onclick="goToSource(18)">[18]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 6</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Reconfiguration of the accident site is concluded.
+                            <sup class="cite-ref" onclick="goToSource(21)">[21]</sup>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="sec-3" class="timeline-section">
+                <h2 class="section-title">Immediate Off-site Developments</h2>
+                <div class="year-header">2023</div>
+
+                <div class="timeline-row">
+                    <span class="t-date">March 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Stationmaster of Larissa Railway Station is arrested and charged with
+                            negligence.
+                            <sup class="cite-ref" onclick="goToSource(13)">[13]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Minister of Infrastructure and Transport Kostas Karamanlis resigns.
+                            <sup class="cite-ref" onclick="goToSource(22)">[22]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The CEOs of OSE (Spyros Pateras) and ERGOSE (Christos Vinis) resign.
+                            <sup class="cite-ref" onclick="goToSource(23)">[23]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Massive demonstrations and strikes spread across the country lasting many
+                            days.
+                            <sup class="cite-ref" onclick="goToSource(24)">[24]</sup><sup class="cite-ref"
+                                onclick="goToSource(25)">[25]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Recordings between the Stationmaster and train driver of IC62 are leaked to
+                            the press.
+                            <sup class="cite-ref" onclick="goToSource(26)">[26]</sup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sec-4" class="timeline-section">
+                <h2 class="section-title">Further Developments (2023-2025)</h2>
+
+                <div class="year-header">2023</div>
+                <div class="timeline-row">
+                    <span class="t-date">March 6</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Investigators request the video footage of IC62 and the stations it stopped
+                            at from the Security company “Interstar” (responsible for the cameras in the Railway route).
+                            <sup class="cite-ref" onclick="goToSource(27)">[27]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 9</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Charges are filed against two additional stationmasters and one inspector.
+                            <sup class="cite-ref" onclick="goToSource(28)">[28]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 11</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Video footage from a mini market showing freight train 63503 passing through
+                            Leptokarya town is released to the press.
+                            <sup class="cite-ref" onclick="goToSource(29)">[29]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">May 21 &<br>June 25</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Kostas Karamanlis is reelected as a Member of Parliament.
+                            <sup class="cite-ref" onclick="goToSource(30)">[30]</sup><sup class="cite-ref"
+                                onclick="goToSource(31)">[31]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">June 2</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Prosecutor Popi Papadopoulou of the European Public Prosecutor’s Office
+                            (EPPO) requests an investigation into former Ministers of Infrastructure and Transport
+                            Christos Spirtzis and Kostas Karamanlis.
+                            <sup class="cite-ref" onclick="goToSource(32)">[32]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">July 17</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Following request by relatives of victims, Investigative Judge of Larissa
+                            District Court requests video footage of the loading freight train 63503.
+                            <sup class="cite-ref" onclick="goToSource(27)">[27]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">August 2</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Tempi Accident Victims Association Personnel serve an extrajudicial
+                            notice to Kostas Agorastos asking for explanation regarding the alteration of the accident
+                            site.
+                            <sup class="cite-ref" onclick="goToSource(33)">[33]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">August 4</span>
+                    <div class="timeline-content">
+                        <div class="t-text">OSE and Security Company "Interstar" deliver 6 hard drives which they
+                            claimed showed the full loading process in Thessaloniki Commercial Station. They state that
+                            the footage has been deleted and needs to be retrieved.
+                            <sup class="cite-ref" onclick="goToSource(27)">[27]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">November</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Anubis Coldcase K9 Team investite the depot in Koulouri and finds the black
+                            box of IC62, human bone fragments belonging to victim, personal items of the victims, along
+                            with other debris (On March 1, 2023, the Fire Department had refuted the offer by Anubis to
+                            help).
+                            <sup class="cite-ref" onclick="goToSource(34)">[34]</sup>
+                            <sup class="cite-ref" onclick="goToSource(35)">[35]</sup>
+                            <sup class="cite-ref" onclick="goToSource(36)">[36]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">November 23</span>
+                    <div class="timeline-content">
+                        <div class="t-text">After the proposal of KKE and the approval of the majority of the
+                            Parliament, a Parliamentary Inquiry Committee titled “Committee of Inquiry for the
+                            investigation of the Tempi crime and all aspects related to it” is established. Nea
+                            Dimokratia (16 Members) holds the ultimate majority against the opposition (15 Members).
+                            <sup class="cite-ref" onclick="goToSource(37)">[37]</sup>
+                            <sup class="cite-ref" onclick="goToSource(38)">[38]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">December 11</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The European Public Prosecutor’s Office charges 23 non-political suspects
+                            with fraud and breach of trust regarding Contract 717.
+                            <sup class="cite-ref" onclick="goToSource(39)">[39]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="year-header">2024</div>
+
+                <div class="timeline-row">
+                    <span class="t-date">February 5</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Larissa District Court Prosecutor files charges for misdemeanor against
+                            Kostas Agorastos for breaches of duty regarding the accident site alteration.
+                            <sup class="cite-ref" onclick="goToSource(40)">[40]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">February 20</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Syriza, Pasok, Elliniki Lysi, Nea Aristera, Spartiates and KKE withdraw from
+                            the Parliamentary Inqury Committee denouncing it as a cover-up attempt.
+                            <sup class="cite-ref" onclick="goToSource(41)">[41]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">February 22</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Philippos Tsalidis (Former CEO of TRAINOSE) testifies to the Interogator
+                            that former Minister of Infrastructure was aware of the railway’s condition. He confirms
+                            that Trains were not monitored in real-time (Telecommand System), there was no visible
+                            tracking of train movement per direction (Signaling), GSM-R (Emergency communication system)
+                            was nonfunctional and ETCS (ensures trains don’t exceed safe speed or distance, and stops
+                            them automatically if needed) was not active due to lack of a complete signaling system.
+                            <sup class="cite-ref" onclick="goToSource(42)">[42]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">February 28</span>
+                    <div class="timeline-content">
+                        <div class="t-text">1st Anniversary of the Accident. Massive Protests and Strikes take place.
+                            <sup class="cite-ref" onclick="goToSource(43)">[43]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 10</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Parliamentary Inquiry Committee concludes, with the majority approving
+                            the report issued by Nea Dimokratia, which attributes the crash to “human error” and
+                            Hellenic Train, stating that there was no cover-up.
+                            <sup class="cite-ref" onclick="goToSource(44)">[44]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 24</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Newspaper “To Vima” reports that audio recordings of the stationmaster on
+                            the night of the crash were edited before leaked to the press, to reinforce the “human
+                            error” narrative.
+                            <sup class="cite-ref" onclick="goToSource(45)">[45]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">March 26</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Pasok, Syriza, Nea Aristera and Plefsi Eleftherias file a motion of no
+                            confidence against the government which is rejected in the Plenary of the Parliament on
+                            March 28th.
+                            <sup class="cite-ref" onclick="goToSource(46)">[46]</sup>
+                            <sup class="cite-ref" onclick="goToSource(47)">[47]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">April</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Anubis Coldcase K9 Team investigates the private lot at Pigadia and finds
+                            personal items and bone fragments belonging to victims.
+                            <sup class="cite-ref" onclick="goToSource(48)">[48]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">November 11</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Investigative Judge discovers that the submitted footage of, allegedly, the
+                            Thessaloniki Commercial Station showing the loading of freight train 63503 is actually from
+                            the Thessaloniki Passenger Station. The relevant footage is considered lost/overwritten.
+                            <sup class="cite-ref" onclick="goToSource(27)">[27]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">November 18</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Supreme Court Prosecutor, Georgia Adeilini, orders urgent investigation in
+                            the reasons that the footage from the Thessaloniki Commercial Station showing the loading of
+                            the train was not delivered to the Larissa District Court.
+                            <sup class="cite-ref" onclick="goToSource(49)">[49]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">November 22</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Interstar informs the investigator that there is video footage of the
+                            freight train passing from different points on the route. The footage is delivered on
+                            December 12.
+                            <sup class="cite-ref" onclick="goToSource(27)">[27]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="year-header">2025</div>
+
+                <div class="timeline-row">
+                    <span class="t-date">January 20</span>
+                    <div class="timeline-content">
+                        <div class="t-text">An audio recording from the train right after the crash, where passenger is
+                            heard shouting “I have no oxygen” is published.
+                            <sup class="cite-ref" onclick="goToSource(50)">[50]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">January 26</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Massive Protests with the slogan “I have no oxygen” take place in 110 cities
+                            in Greece and many cities worldwide.
+                            <sup class="cite-ref" onclick="goToSource(51)">[51]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">January 30</span>
+                    <div class="timeline-content">
+                        <div class="t-text">News report reveals that Police officers testified that they faced pressure
+                            from government officials to authorize the removal of debris and the reconfiguration of the
+                            accident site.
+                            <sup class="cite-ref" onclick="goToSource(52)">[52]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">February 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The first civil court decision awards 800.000€ to a victim’s family as
+                            compensation assigning liability to OSE and Hellenic Train.
+                            <sup class="cite-ref" onclick="goToSource(53)">[53]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">February 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">News report reveals that the biological material recovered from the accident
+                            site was destroyed 40 days after the crash.
+                            <sup class="cite-ref" onclick="goToSource(54)">[54]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">February 5</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Interstar lawyer, Vasilis Kapernaros, delivers to the investigator three new
+                            videos (in a USB stick) showing the freight train passing through Platamonas and Tempi
+                            tunnels the night of the crash. Two days later the videos are leaked to the press.
+                            <sup class="cite-ref" onclick="goToSource(55)">[55]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">February 10</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Police Authorities raid the offices of Interstar with the purpose of seizing
+                            hard drives to verify the authenticity of the videos delivered by Vasilis Kapernaros.
+                            <sup class="cite-ref" onclick="goToSource(55)">[55]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">February 13</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Court-appointed experts Apostolos Vasilakos and Stavros Mpatzopoulos
+                            analyzed the videos from Interstar and stated that no extra tank or 14th wagon were on the
+                            freight train though they could not certify the authenticity of the footage.
+                            <sup class="cite-ref" onclick="goToSource(56)">[56]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <span class="t-date">February 28</span>
+                    <div class="timeline-content">
+                        <div class="t-text">2nd Anniversary of the Accident. Historically massive protests as well as
+                            strikes take place.
+                            <sup class="cite-ref" onclick="goToSource(57)">[57]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">March 3</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Christos Triantopoulos resigns from the position of Deputy Minister for
+                            Climate Crisis and Civil Protection after allegations that he tampered the accident site.
+                            <sup class="cite-ref" onclick="goToSource(58)">[58]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">March 3</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Plenary of Parliament votes in favor of the establishment of a “Special
+                            Parliamentary Committee for the conduct of Preliminary Examination regarding the potential
+                            commission of the offense of breach of duty” by Christos Triantopoulos.
+                            <sup class="cite-ref" onclick="goToSource(59)">[59]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">March 18</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Establishment of the Special Parliamentary Committee for the conduct of
+                            Preliminary Examination regarding the potential commission of the offense of breach of duty
+                            (Nea Dimokratia: 14 members, Opposition: 13 members).
+                            <sup class="cite-ref" onclick="goToSource(60)">[60]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">March 18</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Christos Triantopoulos requests to be referred directly to the Judicial
+                            Council, by passing the parliamentary investigation process.
+                            <sup class="cite-ref" onclick="goToSource(61)">[61]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">March 28</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Police forensics ruled the videos footage of the freight train from
+                            Interstar as genuine.
+                            <sup class="cite-ref" onclick="goToSource(62)">[62]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">April 7</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The “Special Parliamentary Committee for the conduct of Preliminary
+                            Examination regarding the potential commission of the offense of breach of duty” concludes
+                            with the majority approving the proposal by Nea Dimokratia, for prosecution of Christos
+                            Triantopoulos for breach of duty. Opposition parties refuse to participate in the vote.[1]
+                            <sup class="cite-ref" onclick="goToSource(63)">[63]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">April 9</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Deputy President of the board of the Hellenic Air & Rail safety
+                            Investigation Authority Christos Papadimitriou (HARSIA/ EODASAAM) resigns as a result of the
+                            fireball section controversy.
+                            <sup class="cite-ref" onclick="goToSource(64)">[64]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">April 11</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Plenary of the Parliament approves the Proposal made by the Special
+                            Parliamentary Committee for the conduct of Preliminary Examination regarding the potential
+                            commission of the offense of breach of duty and refers Christos Triantopoulos to the
+                            Judicial Council.
+                            <sup class="cite-ref" onclick="goToSource(65)">[65]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">April 30</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The case file regarding the former Ministers of Infrastructure and Trasport
+                            Christos Spirtzis and Kostas Karamanlis is transmitted to the Parliament.
+                            <sup class="cite-ref" onclick="goToSource(66)">[66]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">May 19</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Plenary of the Parliament votes in favor of forming “Special Preliminary
+                            Committee for the Conduct of a Preliminary Examination regarding ‘the tragic accident that
+                            took place on 28/02/2023 in the area of Evangelismos, Tempi, Larissa’” in which potential
+                            offenses for breach of duty by Kostas Karamanlis will be examined.
+                            <sup class="cite-ref" onclick="goToSource(67)">[67]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">June 25</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Special Preliminary Committee for the Conduct of a Preliminary
+                            Examination regarding ‘the tragic accident that took place on 28/02/2023 in the area of
+                            Evangelismos, Tempi, Larissa’ is established (Nea Dimokratia: 14 members, Opposition: 12
+                            Members).
+                            <sup class="cite-ref" onclick="goToSource(68)">[68]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">June 26</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Committee’s majority rejects the opposition’s list of witnesses, refuses
+                            to grant access to the full case file and calls only Kostas Karamanlis as a witness to
+                            testify.
+                            <sup class="cite-ref" onclick="goToSource(69)">[69]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">July 7</span>
+                    <div class="timeline-content">
+                        <div class="t-text">Kostas Karamanlis, instead of showing up to the Committee, sends memo in
+                            which he denies committing any criminal act but expresses his desire to be referred to the
+                            Judicial Council to prove his innocence.
+                            <sup class="cite-ref" onclick="goToSource(70)">[70]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">July 17</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Special Preliminary Committee for the Conduct of a Preliminary
+                            Examination regarding ‘the tragic accident that took place on 28/02/2023 in the area of
+                            Evangelismos, Tempi, Larissa’ concludes with the majority approving the proposal by Nea
+                            Dimokratia, for prosecution of Kostas Karamanlis for breach of duty. Opposition parties
+                            refuse to participate in the vote.
+                            <sup class="cite-ref" onclick="goToSource(71)">[71]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <span class="t-date">July 22</span>
+                    <div class="timeline-content">
+                        <div class="t-text">The Plenary of the Parliament votes in favor of the Proposal made by Special
+                            Preliminary Committee for the Conduct of a Preliminary Examination regarding ‘the tragic
+                            accident that took place on 28/02/2023 in the area of Evangelismos, Tempi, Larissa’ and
+                            refers Kostas Karamanlis to the Judicial Council.
+                            <sup class="cite-ref" onclick="goToSource(72)">[72]</sup>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div id="sec-5" class="timeline-section ">
+                <h2 class="section-title">Technical Reports</h2>
+
+                <div class="year-header">2023</div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">March 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Report by the Fire Service (1)<br>
+                            <strong>Findings: </strong> The fire was caused by the collision of the two trains.
+                            <sup class="cite-ref" onclick="goToSource(73)">[73]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">April 20</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong> Report by the "Committee of Experts" by the Ministry of
+                            Infrastructure and Transport<br>
+                            <strong>Findings: </strong> Accident is a result of chronic systemic pathogens and human
+                            error.
+                            <sup class="cite-ref" onclick="goToSource(12)">[12]</sup>
+                            <sup class="cite-ref" onclick="goToSource(74)">[74]</sup>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-row ">
+                    <span class="t-date">May 10</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Technical report by General Chemical State Laboratory (1)<br>
+                            <strong>Findings: </strong>Analysis of soil and debris samples. According to the report
+                            traces of sylicon oil, xylene, toluene and benzene were detected.
+                            <sup class="cite-ref" onclick="goToSource(75)">[75]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">June</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Judicial Expert Report<br>
+                            <strong>Findings: </strong>Attributes the cause of the crash to human error of the
+                            stationmaster as well as the train driver of the passanger
+                            train while noting that safety systems would have prevented the accident. Attributes the
+                            fire to electric arcs and the fireball to silicon oil.
+                            <sup class="cite-ref" onclick="goToSource(76)">[76]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">July 6</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Report by the Fire Service (Supplementary) (2)<br>
+                            <strong>Findings: </strong>The fireball was caused by the ignition of silicon oil from the
+                            the locomotive transformers.
+                            <sup class="cite-ref" onclick="goToSource(73)">[73]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">July 17</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>EDAPO (Committee of Independent Experts of the Victims Families)
+                            (1)<br>
+                            <strong>Findings: </strong>The lack of safety systems, human error and deficiencies in
+                            personel training contributed
+                            to the accident while the fireball is atributed to an "unknown combustion matter", citing
+                            the detection of xyline.
+                            <sup class="cite-ref" onclick="goToSource(77)">[77]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">December 1</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Kakamoukas & Kakamoukas - Hired by the victim's family.<br>
+                            <strong>Findings: </strong> The collision was caused by a combination of human error and
+                            lack of safety systems.
+                            Attributed fire to the collision of the passanger train with high voltage overhead tables,
+                            and the fireball to silicone oil.
+                            <sup class="cite-ref" onclick="goToSource(78)">[78]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="year-header">2024</div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">January</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Anastasios Dedes - Technical Advisor Report- hired by victim's
+                            family<br>
+                            <strong>Findings: </strong>The fire and the fireball was caused by 7 tons and 200 kilos of
+                            silicon oil.
+                            <sup class="cite-ref" onclick="goToSource(79)">[79]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 2</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Technical report by General Chemical State Laboratory (2)<br>
+                            <strong>Findings: </strong>Analysis in soil samples from the accident site. According to the
+                            report xylene, toluene and benzene have were detected.
+                            <sup class="cite-ref" onclick="goToSource(41)">[41]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 16</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Paul Jowett (Burgoynes) - Hired by victims' family<br>
+                            <strong>Findings: </strong>Concluded the fire was likely caused by silicone oil from
+                            transformers, though other materials couldn't be ruled out.
+                            It notes that the accident site was altered before the collection of the samples for
+                            chemical analysis.
+                            <sup class="cite-ref" onclick="goToSource(80)">[80]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 23</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Technical Advisor Vassilis Kokotsakis appointed by victims'
+                            families<br>
+                            <strong>Findings: </strong>Xylene, Toluene and Benzene were detected albeit they should not
+                            have been present.
+                            Rejects the theory that the fireball was caused by silicon oil and argues that it was caused
+                            by a large quantity of chemical solvents.
+                            <sup class="cite-ref" onclick="goToSource(81)">[81]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 26</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report:</strong>EDAPO (Committee of Independent Experts of the Victims Families)
+                            (2)<br>
+                            <strong>Findings: </strong>Mapped every victims' and injured passanger's position. Concluded
+                            that at least 5-7 victims survived the collision but died due to the fire.
+                            <sup class="cite-ref" onclick="goToSource(82)">[82]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">May 16</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Technical Advisor Vassilis Kokotsakis appointed by victims'
+                            families<br>
+                            <strong>Findings: </strong>The crash was not a head-on collision; The two electric
+                            locomotives of the fright train derailed moments before the crash.
+                            The fireball was caused by a large load of undecleared chemicals which is estimated to be
+                            approximatelly 12-15 tons.
+                            Rejects the theory that the fireball was caused by silicon oil. The accident site was
+                            systemically altered and timeline of the alteration is provided.
+                            <sup class="cite-ref" onclick="goToSource(75)">[75]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="year-header">2025</div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">January 12 &<br>January 30</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong> Technical Advisor Vassilis Kokotsakis appointed by victims'
+                            families<br>
+                            <strong>Findings: </strong>Argues that the accident site was altered while reporting the
+                            presense unidentified individuals who were not part of the rescue teams.
+                            Also, concludes that 27 victims survived the collision but died due to the fire.
+                            <sup class="cite-ref" onclick="goToSource(83)">[83]</sup>
+                            <sup class="cite-ref" onclick="goToSource(84)">[84]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 22</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Yves Carton (on behalf of Hellenic Train)<br>
+                            <strong>Findings: </strong>Rejects the presence of illegal cargo and concludes that the fire
+                            and the
+                            fireball was a result of "unforunate coincidents" stating that the the fire and fireball
+                            were results of Silicon oil and electric arcs.
+                            <sup class="cite-ref" onclick="goToSource(85)">[85]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">February 27</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Technical report by "The Hellenic Air & Rail safety Investigation
+                            Authority (HARSIA/ EODASAAM)"<br>
+                            <strong>Findings: </strong>Initially concluded that the crash was caused by systemic
+                            abandonment of the railway while the fire and fireball could not have been caused by silicon
+                            oil,
+                            pointing to “unknown fuels” (hydrocarbon) siting simulations by the Univesities of Ghent and
+                            Pisa.
+                            Also noted that evidence was lost due to alteration of the accident site.[1]
+                            On April 7, after, both Universities objected to how the data was used, the section
+                            regarding the fireball was removed from the report.
+                            <sup class="cite-ref" onclick="goToSource(11)">[11]</sup>
+                            <sup class="cite-ref" onclick="goToSource(86)">[86]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">April 30</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Thechnical report of Derbis inspection by the National Technical
+                            University of Athens (Prof. P Tsakiridis)<br>
+                            <strong>Findings: </strong>Examined 9 metal fragments collected from the rear of drivers' of
+                            the 2nd electric locomotive of the freight train
+                            and determine that the damage on them was caused by mechanical stress not by fire or
+                            explosion.
+                            <sup class="cite-ref" onclick="goToSource(87)">[87]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">May 8</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Thechnical report regarding the fireball by the National Technical
+                            University of Athens (Prof. D Karonis)<br>
+                            <strong>Findings:</strong>The fireball was likely caused by electric arcs and silicon oil
+                            breaking into flamable gases(hydrogen/methane).
+                            The traces of Xylene, Toluene and Benzene could be products of thermal degradation of the
+                            trains construction matterials.
+                            <sup class="cite-ref" onclick="goToSource(88)">[88]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">May 27</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>EDAPO (Committee of Independent Experts of the Victims Families)
+                            (3)<br>
+                            <strong>Findings:</strong>Detailed documentation on how the accident site was altered and
+                            concluded that
+                            the site alteration made it difficult to collect essential evidence regarding the fire and
+                            the victims.
+                            <sup class="cite-ref" onclick="goToSource(89)">[89]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">July 18</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Technical advisors Vasilis Kokotsakis and Federico Karasko<br>
+                            <strong>Findings: </strong> Before, during and after the seizure of Interstar Hard Drives on
+                            February 10th mass deletion of files takes place.
+                            Also, they report the existence of at least three more videos while pointing contradictions
+                            between them and the videos submitted by Vasilis Kapernaros.
+                            <sup class="cite-ref" onclick="goToSource(90)">[90]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">August 28</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Fire Service (Arson Crimes) (3)<br>
+                            <strong>Findings: </strong>Inspection of the wreckage at Koulouri on March 2025.
+                            According to the report no traces of fire on the second wagon of the freight train were
+                            detected.
+                            <sup class="cite-ref" onclick="goToSource(91)">[91]</sup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-row ">
+                    <span class="t-date">August 29</span>
+                    <div class="timeline-content">
+                        <div class="t-text">
+                            <strong>Report: </strong>Technical report by General Chemical State Laboratory (3)<br>
+                            <strong>Findings:</strong>Analysis in samples taken from OSE Depot in Koulouri. Xylene and
+                            toluene was detected.
+                            <sup class="cite-ref" onclick="goToSource(92)">[92]</sup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sources" class="tab-view">
+            <div class="sources-list">
+                <h2>References & Bibliography</h2>
+                <ul>
+                    <li id="src-1"><span class="source-num">[1]</span> Θοδωρής Χονδρόγιαννος, ‘Το πραγματικό
+                        όνομα του Σταθμάρχη ήταν Άκτωρ και Alstom’, R•U, 6 March 2023<a
+                            href="https://www.reportersunited.gr/10669/tembi-aktor-alstom-ergose/"
+                            target="_blank">https://www.reportersunited.gr/10669/tembi-aktor-alstom-ergose/</a>.
+                    </li>
+                    <li id="src-2"><span class="source-num">[2]</span> Newsroom, ‘Ολοκληρώθηκε η πώληση της
+                        ΤΡΑΙΝΟΣΕ στην Ferrovie Dello Stato Italiane S.p.A.’, Η ΚΑΘΗΜΕΡΙΝΗ, 14 September 2017 <a
+                            href="https://www.kathimerini.gr/economy/business/926594/oloklirothike-i-polisi-tis-trainose-stin-ferrovie-dello-stato-italiane-s-p-a/"
+                            target="_blank">https://www.kathimerini.gr/economy/business/926594/oloklirothike-i-polisi-tis-trainose-stin-ferrovie-dello-stato-italiane-s-p-a/</a>.
+                    </li>
+                    <li id="src-3"><span class="source-num">[3]</span> ‘ΟΣΕ: Ανακρίβειες για την ύπαρξη πλήρους
+                        τηλεδιοίκησης στη Λάρισα το 2019’, 6 March 2023 <a
+                            href="https://www.naftemporiki.gr/society/1447203/ose-anakriveies-gia-tin-yparxi-pliroys-tiledioikisis-sti-larisa-to-2019/"
+                            target="_blank">https://www.naftemporiki.gr/society/1447203/ose-anakriveies-gia-tin-yparxi-pliroys-tiledioikisis-sti-larisa-to-2019/</a>.
+                    </li>
+                    <li id="src-4"><span class="source-num">[4]</span> ‘Επιστολή καταπέλτης προειδοποιούσε για
+                        τον κίνδυνο στα Τέμπη, έκθετος ο Καραμανλής - Dnews’, 14 February 2024 <a
+                            href="https://www.dnews.gr/eidhseis/politikes-eidhseis/460808/epistoli-katapeltis-proeidopoioyse-gia-ton-kindyno-sovaroy-dystyximatos-sta-tempi-eipe-psemata-o-karamanlis"
+                            target="_blank">https://www.dnews.gr/eidhseis/politikes-eidhseis/460808/epistoli-katapeltis-proeidopoioyse-gia-ton-kindyno-sovaroy-dystyximatos-sta-tempi-eipe-psemata-o-karamanlis</a>.
+                    </li>
+                    <li id="src-5"><span class="source-num">[5]</span> athenstransport, ‘Αποχώρηση με αιχμές από
+                        τη διοίκηση της ΤΡΑΙΝΟΣΕ του Φίλιππου Τσαλίδη’, Athens Transport, 14 September 2021 <a
+                            href="https://www.athenstransport.com/2021/09/trainose-tsalidis/"
+                            target="_blank">https://www.athenstransport.com/2021/09/trainose-tsalidis/</a>.
+                    </li>
+                    <li id="src-6"><span class="source-num">[6]</span> ‘TrainOSE Renamed Hellenic Train, Eyes
+                        Expansion | eKathimerini.Com’, 2 July 2022, <a
+                            href="https://www.ekathimerini.com/economy/1188080/trainose-renamed-hellenic-train-eyes-expansion/"
+                            target="_blank">https://www.ekathimerini.com/economy/1188080/trainose-renamed-hellenic-train-eyes-expansion/</a>.
+                    </li>
+                    <li id="src-7"><span class="source-num">[7]</span> ‘Τέμπη - Οι συνδικαλιστές είχαν
+                        προειδοποιήσει: «Δεν θα περιμένουμε το δυστύχημα που έρχεται»’, CNN.gr, 2 March 2023 <a
+                            href="https://www.cnn.gr/ellada/story/352402/tempi-oi-syndikalistes-eixan-proeidopoiisei-den-tha-perimenoume-to-dystyxima-pou-erxetai"
+                            target="_blank">https://www.cnn.gr/ellada/story/352402/tempi-oi-syndikalistes-eixan-proeidopoiisei-den-tha-perimenoume-to-dystyxima-pou-erxetai</a>.
+                    </li>
+                    <li id="src-8"><span class="source-num">[8]</span> ‘Commission decides to refer GREECE to
+                        the Court’, Text, European Commission - European Commission <a
+                            href="https://ec.europa.eu/commission/presscorner/detail/pt/ip_23_593"
+                            target="_blank">https://ec.europa.eu/commission/presscorner/detail/pt/ip_23_593</a>.
+                    </li>
+                    <li id="src-9"><span class="source-num">[9]</span> ‘Όταν ο Καραμανλής έλεγε πως «δεν
+                        παίζουμε με την ασφάλεια των επιβατών στα τρένα» μια βδομάδα πριν την τραγωδία στα
+                        Τέμπη’, in.gr, 4 March 2023 <a
+                            href="https://www.in.gr/2023/03/04/politics/kyvernisi/tempi-otan-o-karamanlis-elege-pos-den-paizoume-tin-asfaleia-ton-epivaton-sta-trena-mia-vdomada-prin-tin-tragodia/"
+                            target="_blank">https://www.in.gr/2023/03/04/politics/kyvernisi/tempi-otan-o-karamanlis-elege-pos-den-paizoume-tin-asfaleia-ton-epivaton-sta-trena-mia-vdomada-prin-tin-tragodia/</a>.
+                    </li>
+                    <li id="src-10"><span class="source-num">[10]</span> ‘Τέμπη. Το Χρονικό Της Τραγωδίας Και η
+                        Διερεύνηση Των Ευθυνών’ <a
+                            href="https://www.mixanitouxronou.gr/tempi-to-chroniko-tis-tragodias-kai-i-diereynisi-ton-eythynon/"
+                            target="_blank">https://www.mixanitouxronou.gr/tempi-to-chroniko-tis-tragodias-kai-i-diereynisi-ton-eythynon/</a>.
+                    </li>
+                    <li id="src-11"><span class="source-num">[11]</span> ‘Head-on Collision between a Passenger
+                        Train and a Freight Train in Tempi, 28 February 2023’, Hellenic Air & Rail safety
+                        Investigation Authority, 27 February 2025.</li>
+                    <li id="src-12"><span class="source-num">[12]</span> Ιωάννης-Κωνσταντίνος Χαλκιάς et al.,
+                        ‘Πόρισμα Της Επιτροπής Εμπειρογνωμόνων Για Το Σιδηροδρομικό Δυστύχημα Στα Τέμπη Στις
+                        28.02.2023’, 20 April 2023.</li>
+                    <li id="src-13"><span class="source-num">[13]</span> ‘Tempe case timeline: Cover-up
+                        allegations, forensic revelations, and Greece’s crisis of accountability’, The Press
+                        Project, 26 February 2025 <a
+                            href="https://thepressproject.gr/tempe-case-timeline-cover-up-allegations-forensic-revelations-and-greeces-crisis-of-accountability/"
+                            target="_blank">https://thepressproject.gr/tempe-case-timeline-cover-up-allegations-forensic-revelations-and-greeces-crisis-of-accountability/</a>.
+                    </li>
+                    <li id="src-14"><span class="source-num">[14]</span> ‘A brief timeline of the Tempe
+                        tragedy’, The Press Project, 21 March 2024 <a
+                            href="https://thepressproject.gr/a-brief-timeline-of-the-tempe-tragedy/"
+                            target="_blank">https://thepressproject.gr/a-brief-timeline-of-the-tempe-tragedy/</a>.
+                    </li>
+                    <li id="src-15"><span class="source-num">[15]</span> ‘Αποκάλυψη-βόμβα: Ο Ξιφαράς έδωσε την
+                        εντολή για το μπάζωμα στα Τέμπη’, Έρευνες, Data Journalists, 19 February 2025 <a
+                            href="https://www.datajournalists.co.uk/2025/02/19/apokalypsi-vomva-o-xifaras-edose-tin-entoli-gia-to-mpazoma-sta-tempi/"
+                            target="_blank">https://www.datajournalists.co.uk/2025/02/19/apokalypsi-vomva-o-xifaras-edose-tin-entoli-gia-to-mpazoma-sta-tempi/</a>.
+                    </li>
+                    <li id="src-16"><span class="source-num">[16]</span> ‘Τέμπη / Είχαν πετάξει απόβλητα από
+                        ελαιοτριβείο στο οικόπεδο που βρέθηκαν ανθρώπινα οστά’, Αυγή, 10 March 2025 <a
+                            href="https://www.avgi.gr/koinonia/501946_eihan-petaxei-apoblita-apo-elaiotribeio-sto-oikopedo-poy-brethikan-anthropina-osta"
+                            target="_blank">https://www.avgi.gr/koinonia/501946_eihan-petaxei-apoblita-apo-elaiotribeio-sto-oikopedo-poy-brethikan-anthropina-osta</a>.
+                    </li>
+                    <li id="src-17"><span class="source-num">[17]</span> ‘Τέμπη: Το χρονικό του μπαζώματος του
+                        χώρου της τραγωδίας’, Ελλάδα, MEGA TV, 7 March 2025 <a
+                            href="https://www.megatv.com/2025/03/07/tempi-to-xroniko-tou-mpazomatos-tou-xorou-tis-tragodias/"
+                            target="_blank">https://www.megatv.com/2025/03/07/tempi-to-xroniko-tou-mpazomatos-tou-xorou-tis-tragodias/</a>.
+                    </li>
+                    <li id="src-18"><span class="source-num">[18]</span> TO BHMA, ‘Ποιοι και πότε αποφάσισαν το
+                        μπάζωμα στα Τέμπη - Η άγνωστη σύσκεψη’, ΤΟ ΒΗΜΑ, 28 May 2024 <a
+                            href="https://www.tovima.gr/2024/05/28/society/tempi-poioi-apofasisan-to-mpazoma-i-agnosti-syskepsi/"
+                            target="_blank">https://www.tovima.gr/2024/05/28/society/tempi-poioi-apofasisan-to-mpazoma-i-agnosti-syskepsi/</a>.
+                    </li>
+                    <li id="src-19"><span class="source-num">[19]</span> Γιάννης Σουλιώτης, ‘Πυροσβεστική: ΕΔΕ
+                        για τους χειρισμούς αξιωματούχων στα Τέμπη’, Η ΚΑΘΗΜΕΡΙΝΗ, 31 January 2025 <a
+                            href="https://www.kathimerini.gr/society/563446495/pyrosvestiki-ede-gia-toys-cheirismoys-axiomatoychon-sta-tempi/"
+                            target="_blank">https://www.kathimerini.gr/society/563446495/pyrosvestiki-ede-gia-toys-cheirismoys-axiomatoychon-sta-tempi/</a>.
+                    </li>
+                    <li id="src-20"><span class="source-num">[20]</span> ‘Έγγραφο «αποκάλυψη» για το μπάζωμα στα
+                        Τέμπη - Τι δείχνει το νέο υλικό που περιήλθε στην κατοχή των Αρχών’, in.gr, 8 February
+                        2025 <a
+                            href="https://www.in.gr/2025/02/08/greece/tempi-eggrafo-apokalypsi-gia-to-mpazoma-tou-xorou-ti-deixnoun-ta-nea-vinteo-apo-to-emporiko-treno/"
+                            target="_blank">https://www.in.gr/2025/02/08/greece/tempi-eggrafo-apokalypsi-gia-to-mpazoma-tou-xorou-ti-deixnoun-ta-nea-vinteo-apo-to-emporiko-treno/</a>.
+                    </li>
+                    <li id="src-21"><span class="source-num">[21]</span> ΓΙΑΝΝΗΣ ΑΛΜΠΑΝΗΣ, ‘Τέμπη: Το μπάζωμα
+                        της δικαιοσύνης’, News 24/7, 6 March 2024 <a
+                            href="https://www.news247.gr/gnomes/tempi-to-bazoma-tis-dikaiosinis/"
+                            target="_blank">https://www.news247.gr/gnomes/tempi-to-bazoma-tis-dikaiosinis/</a>.
+                    </li>
+                    <li id="src-22"><span class="source-num">[22]</span> ‘Παραιτήθηκε ο Κώστας Αχ. Καραμανλής:
+                        «Ως ελάχιστη ένδειξη σεβασμού στη μνήμη των θυμάτων»’, Η ΚΑΘΗΜΕΡΙΝΗ, 1 March 2023, <a
+                            href="https://www.kathimerini.gr/politics/government/562300867/kostas-ach-karamanlis-anakoinose-tin-paraitisi-toy-apo-ypoyrgos/"
+                            target="_blank">https://www.kathimerini.gr/politics/government/562300867/kostas-ach-karamanlis-anakoinose-tin-paraitisi-toy-apo-ypoyrgos/</a>.
+                    </li>
+                    <li id="src-23"><span class="source-num">[23]</span> ‘«Παραιτήθηκαν» οι διοικητές του ΟΣΕ
+                        και της ΕΡΓΟΣΕ’, ProtoThema, 1 March 2023, <a
+                            href="https://www.protothema.gr/politics/article/1345315/paraitithikan-oi-dioikites-tou-ose-kai-tis-ergose/"
+                            target="_blank">https://www.protothema.gr/politics/article/1345315/paraitithikan-oi-dioikites-tou-ose-kai-tis-ergose/</a>.
+                    </li>
+                    <li id="src-24"><span class="source-num">[24]</span> ‘Greek Unions Protest over Rail Safety
+                        Following Train Crash Disaster’, Euronews, 3 March 2023, <a
+                            href="http://www.euronews.com/2023/03/03/greek-unions-protest-over-rail-safety-following-train-crash-disaster"
+                            target="_blank">http://www.euronews.com/2023/03/03/greek-unions-protest-over-rail-safety-following-train-crash-disaster</a>.
+                    </li>
+                    <li id="src-25"><span class="source-num">[25]</span> ‘Thousands March in Greece as Anger
+                        Builds over Train Deaths’, AP News, 3 March 2023, <a
+                            href="https://apnews.com/article/greece-train-collision-crash-2b854bc10b38737b9589123f7a774c78"
+                            target="_blank">https://apnews.com/article/greece-train-collision-crash-2b854bc10b38737b9589123f7a774c78</a>.
+                    </li>
+                    <li id="src-26"><span class="source-num">[26]</span> ‘Τέμπη: Οι διάλογοι του σταθμάρχη με
+                        τον μηχανοδηγό και τον κλειδούχο- Ηχητικό ντοκουμέντο | LiFO’, 1 March 2023, <a
+                            href="https://www.lifo.gr/now/greece/tempi-oi-dialogoi-toy-stathmarhi-me-ton-mihanodigo-kai-ton-kleidoyho-ihitiko-ntokoymento"
+                            target="_blank">https://www.lifo.gr/now/greece/tempi-oi-dialogoi-toy-stathmarhi-me-ton-mihanodigo-kai-ton-kleidoyho-ihitiko-ntokoymento</a>.
+                    </li>
+                    <li id="src-27"><span class="source-num">[27]</span> TO BHMA, ‘Αποκάλυψη-Τέμπη: Μετά από 7
+                        μήνες ζήτησαν βίντεο από το εμπορικό τρένο – Τα σκοτεινά σημεία’, ΤΟ ΒΗΜΑ, 20 February
+                        2025, <a
+                            href="https://www.tovima.gr/2025/02/20/society/apokalypsi-gia-tempi-meta-apo-7-mines-zitise-o-anakritis-vinteo-apo-tin-diadromi-tou-emporikou-trenou/"
+                            target="_blank">https://www.tovima.gr/2025/02/20/society/apokalypsi-gia-tempi-meta-apo-7-mines-zitise-o-anakritis-vinteo-apo-tin-diadromi-tou-emporikou-trenou/</a>.
+                    </li>
+                    <li id="src-28"><span class="source-num">[28]</span> ‘Τέμπη: Διώκονται ποινικά ο επιθεωρητής
+                        της κυκλοφορίας και δύο σταθμάρχες’, ΕΘΝΟΣ, 9 March 2023, <a
+                            href="https://www.ethnos.gr/greece/article/250342/temphdiokontaipoinikaoepitheorhthsthskykloforiaskaidyostathmarxes"
+                            target="_blank">https://www.ethnos.gr/greece/article/250342/temphdiokontaipoinikaoepitheorhthsthskykloforiaskaidyostathmarxes</a>.
+                    </li>
+                    <li id="src-29"><span class="source-num">[29]</span> ‘Τέμπη: Νέο βίντεο-ντοκουμέντο 20 λεπτά
+                        πριν τη μοιραία σύγκρουση’, iefimerida.gr, 11 March 2023, <a
+                            href="https://www.iefimerida.gr/ellada/tempi-binteo-ntokoymento-20-lepta-prin-sygkroysi"
+                            target="_blank">https://www.iefimerida.gr/ellada/tempi-binteo-ntokoymento-20-lepta-prin-sygkroysi</a>.
+                    </li>
+                    <li id="src-30"><span class="source-num">[30]</span> ‘Εκλογές: Επανεκλέγεται ο Κώστας
+                        Καραμανλής στις Σέρρες’, 21 May 2023, <a
+                            href="https://www.naftemporiki.gr/politics/1474051/ekloges-epaneklegetai-o-kostas-karamanlis-stis-serres/"
+                            target="_blank">https://www.naftemporiki.gr/politics/1474051/ekloges-epaneklegetai-o-kostas-karamanlis-stis-serres/</a>.
+                    </li>
+                    <li id="src-31"><span class="source-num">[31]</span> ‘Εκλογές 2023: Αυτοί είναι οι 158
+                        βουλευτές που εκλέγονται με τη Νέα Δημοκρατία’, ertnews.gr, 25 June 2023, <a
+                            href="https://www.ertnews.gr/eidiseis/ellada/politiki/ekloges-2023-aytoi-einai-oi-158-vouleytes-pou-eklegontai-me-ti-nea-dimokratia/"
+                            target="_blank">https://www.ertnews.gr/eidiseis/ellada/politiki/ekloges-2023-aytoi-einai-oi-158-vouleytes-pou-eklegontai-me-ti-nea-dimokratia/</a>.
+                    </li>
+                    <li id="src-32"><span class="source-num">[32]</span> ‘Greece Rejected EU Prosecutor’s Call
+                        for Action against 2 Ex-Ministers after Rail Crash’, POLITICO, 26 January 2024, <a
+                            href="https://www.politico.eu/article/greece-european-public-prosecutors-office-eppo-ministers-christos-spirtzis-konstantinos-karamanlis-rail-crash/"
+                            target="_blank">https://www.politico.eu/article/greece-european-public-prosecutors-office-eppo-ministers-christos-spirtzis-konstantinos-karamanlis-rail-crash/</a>.
+                    </li>
+                    <li id="src-33"><span class="source-num">[33]</span> ‘Τραγωδία στα Τέμπη: Εξηγήσεις για το
+                        «μπάζωμα» του χώρου του δυστυχήματος, ζητούν οι γονείς των θυμάτων’, 2 August 2023, <a
+                            href="https://www.naftemporiki.gr/society/1500779/tragodia-sta-tempi-exigiseis-gia-to-mpazoma-toy-choroy-toy-dystychimatos-zitoyn-oi-goneis-ton-thymaton/"
+                            target="_blank">https://www.naftemporiki.gr/society/1500779/tragodia-sta-tempi-exigiseis-gia-to-mpazoma-toy-choroy-toy-dystychimatos-zitoyn-oi-goneis-ton-thymaton/</a>.
+                    </li>
+                    <li id="src-34"><span class="source-num">[34]</span> Γιώργος Σαχίνης, ‘Βαγγ. Αλεξανδρής: "
+                        Αρνήθηκαν την ομάδα Anubis τις πρώτες ώρες στα Τέμπη, μας είπαν ότι ξεκίνησε η
+                        αποκάθαρση "’, Radio 984, 7 March 2025, <a
+                            href="https://www.radio984.gr/post/vang-alexandris-arnithikan-tin-omada-anubis-tis-protes-ores-sta-tebi-mas-eipan-oti-xekinise-i-apokatharsi/"
+                            target="_blank">https://www.radio984.gr/post/vang-alexandris-arnithikan-tin-omada-anubis-tis-protes-ores-sta-tebi-mas-eipan-oti-xekinise-i-apokatharsi/</a>.
+                    </li>
+                    <li id="src-35"><span class="source-num">[35]</span> ‘Τέμπη: «Εντοπίστηκαν ανθρώπινα μέλη
+                        και εκτός χαρτογράφησης»- Διαψεύδει ο Άρειος Πάγος | LiFO’, 19 November 2023, <a
+                            href="https://www.lifo.gr/now/greece/dystyhima-sta-tempi-entopistikan-anthropina-meli-kai-ektos-hartografisis"
+                            target="_blank">https://www.lifo.gr/now/greece/dystyhima-sta-tempi-entopistikan-anthropina-meli-kai-ektos-hartografisis</a>.
+                    </li>
+                    <li id="src-36"><span class="source-num">[36]</span> ‘Έγκλημα Τέμπη: Πέταξαν Και Ανθρώπινα
+                        Μέλη Μαζί Με Τα Συντρίμμια - Βρέθηκε Χαμένο Κομμάτι Του Κυλικείου (Photos) - Documento’,
+                        <a href="https://www.documentonews.gr/article/egklima-tempi-petaxan-kai-anthropina-meli-mazi-me-ta-syntrimmia-vrethike-xameno-kommati-toy-kylikeioy-photos/"
+                            target="_blank">https://www.documentonews.gr/article/egklima-tempi-petaxan-kai-anthropina-meli-mazi-me-ta-syntrimmia-vrethike-xameno-kommati-toy-kylikeioy-photos/</a>.
+                    </li>
+                    <li id="src-37"><span class="source-num">[37]</span> Rizospastis-Synchroni Epochi,
+                        ‘rizospastis.gr - Υπερψηφίστηκε η Εξεταστική για τα Τέμπη που πρότεινε το ΚΚΕ’,
+                        ΡΙΖΟΣΠΑΣΤΗΣ, 18 November 2023, <a href="https://www.rizospastis.gr/story.do?id=12326503"
+                            target="_blank">https://www.rizospastis.gr/story.do?id=12326503</a>.
+                    </li>
+                    <li id="src-38"><span class="source-num">[38]</span> ‘Συνεδριάσεις/Πρακτικά’, Ελληνικό
+                        Κοινοβούλιο, <a
+                            href="https://www.hellenicparliament.gr/Koinovouleftikes-Epitropes/Synedriaseis?search=on&commission=8a1b38ca-eaae-4b08-aabf-b0c100c8e6b3&SortBy=ReportDate&SortDirection=asc"
+                            target="_blank">https://www.hellenicparliament.gr/Koinovouleftikes-Epitropes/Synedriaseis?search=on&commission=8a1b38ca-eaae-4b08-aabf-b0c100c8e6b3&SortBy=ReportDate&SortDirection=asc</a>.
+                    </li>
+                    <li id="src-39"><span class="source-num">[39]</span> ‘Δυστύχημα στα Τέμπη: Ποινική δίωξη για
+                        κακουργήματα σε 23 άτομα από την Ευρωπαϊκή Εισαγγελία για τη σύμβαση 717’, 12 December
+                        2023, <a
+                            href="https://www.naftemporiki.gr/society/1546807/dystychima-sta-tempi-poiniki-dioxi-gia-kakoyrgimata-se-23-atoma-apo-tin-eyropaiki-eisaggelia-gia-tin-symvasi-717/"
+                            target="_blank">https://www.naftemporiki.gr/society/1546807/dystychima-sta-tempi-poiniki-dioxi-gia-kakoyrgimata-se-23-atoma-apo-tin-eyropaiki-eisaggelia-gia-tin-symvasi-717/</a>.
+                    </li>
+
+
+                    <li id="src-40"><span class="source-num">[40]</span> ‘Ποινική δίωξη σε βάρος του Κώστα
+                        Αγοραστού για τα Τέμπη’, NOMIKI BIBLIOTHIKI Daily, 6 February 2024, <a
+                            href="https://daily.nb.org/nomika-nea/poiniki-dioxi-se-varos-tou-kosta-agorastou-gia-ta-tebi/"
+                            target="_blank">https://daily.nb.org/nomika-nea/poiniki-dioxi-se-varos-tou-kosta-agorastou-gia-ta-tebi/</a>.
+                    </li>
+                    <li id="src-41"><span class="source-num">[41]</span> ‘Το Χρονολόγιο Του Εγκλήματος Των
+                        Τεμπών - Όσα Γνωρίζουμε Μέχρι Σήμερα’, The Press Project, <a
+                            href="https://thepressproject.gr/to-chronologio-tou-egklimatos-ton-tebon-osa-gnorizoume-mechri-simera/"
+                            target="_blank">https://thepressproject.gr/to-chronologio-tou-egklimatos-ton-tebon-osa-gnorizoume-mechri-simera/</a>.
+                    </li>
+                    <li id="src-42"><span class="source-num">[42]</span> Έλενα Καραμαγκάλη, ‘Τέμπη: «Βόμβες»
+                        Στις Καταθέσεις Γενιδούνια-Τσαλίδη Στον Ανακριτή - Στοιχεία Που Δεν Αναδείχθηκαν Ποτέ
+                        Στην Εξεταστική Της Βουλής’, Topontiki.Gr, 29 February 2024, <a
+                            href="https://www.topontiki.gr/2024/02/29/tempi-vomves-stis-katathesis-genidounia-tsalidi-ston-anakriti-stichia-pou-den-anadichthikan-pote-stin-exetastiki-tis-voulis/"
+                            target="_blank">https://www.topontiki.gr/2024/02/29/tempi-vomves-stis-katathesis-genidounia-tsalidi-ston-anakriti-stichia-pou-den-anadichthikan-pote-stin-exetastiki-tis-voulis/</a>.
+                    </li>
+                    <li id="src-43"><span class="source-num">[43]</span> ‘Ποτάμι η οργή για τα Τέμπη παρά τις
+                        προκλήσεις’, ΕΦΣΥΝ, 28 February 2024, <a
+                            href="https://www.efsyn.gr/ellada/424190_potami-i-orgi-gia-ta-tempi-para-tis-prokliseis"
+                            target="_blank">https://www.efsyn.gr/ellada/424190_potami-i-orgi-gia-ta-tempi-para-tis-prokliseis</a>.
+                    </li>
+                    <li id="src-44"><span class="source-num">[44]</span> ‘Εξεταστική για Τέμπη: Εγκρίθηκε το
+                        πόρισμα της ΝΔ- Οι θέσεις των άλλων κομμάτων’, 11 March 2024, <a
+                            href="https://www.naftemporiki.gr/politics/1612740/exetastiki-gia-tempi-egkrithike-to-porisma-tis-nd-oi-theseis-ton-allon-kommaton/"
+                            target="_blank">https://www.naftemporiki.gr/politics/1612740/exetastiki-gia-tempi-egkrithike-to-porisma-tis-nd-oi-theseis-ton-allon-kommaton/</a>.
+                    </li>
+                    <li id="src-45"><span class="source-num">[45]</span> ‘Η Μονταζιέρα Στα Τέμπη Ρίχνει Νέες
+                        Σκιές Στην Τραγωδία - ΤΟ ΒΗΜΑ’, <a
+                            href="https://www.tovima.gr/print/politics/i-montaziera-sta-tempi-lfrixnei-nees-skies-stin-tragodia/"
+                            target="_blank">https://www.tovima.gr/print/politics/i-montaziera-sta-tempi-lfrixnei-nees-skies-stin-tragodia/</a>.
+                    </li>
+                    <li id="src-46"><span class="source-num">[46]</span> ‘Ελλάδα: Κατατίθεται Στη Βουλή η
+                        Πρόταση Δυσπιστίας Κατά Της Κυβέρνησης Για Το Δυστύχημα Στα Τέμπη | Euronews’, <a
+                            href="https://gr.euronews.com/2024/03/26/ellada-sth-boylh-protash-dyspistias-kybernhsh-dystyxhma-temph"
+                            target="_blank">https://gr.euronews.com/2024/03/26/ellada-sth-boylh-protash-dyspistias-kybernhsh-dystyxhma-temph</a>.
+                    </li>
+                    <li id="src-47"><span class="source-num">[47]</span> ‘Βουλή: Καταψηφίστηκε η Πρόταση
+                        Δυσπιστίας Για Τα Τέμπη - Οι Τοποθετήσεις Του Πρωθυπουργού Και Των Πολιτικών Αρχηγών -
+                        ΑΠΕ-ΜΠΕ’, <a
+                            href="https://www.amna.gr/home/article/807716/Bouli-Katapsifistike-i-protasi-duspistias-gia-ta-Tempi-binteo"
+                            target="_blank">https://www.amna.gr/home/article/807716/Bouli-Katapsifistike-i-protasi-duspistias-gia-ta-Tempi-binteo</a>.
+                    </li>
+                    <li id="src-48"><span class="source-num">[48]</span> ‘Τέμπη: Αποκάλυψη LIVE NEWS – Τι βρήκε
+                        η Anubis στο ιδιόκτητο οικόπεδο που μετέφεραν τα χώματα από την τραγωδία’, Ελλάδα, MEGA
+                        TV, 10 March 2025, <a
+                            href="https://www.megatv.com/2025/03/10/tempi-apokalypsi-live-news-ti-vrike-i-anubis-sto-idioktito-oikopedo-pou-meteferan-ta-xomata-apo-tin-tragodia/"
+                            target="_blank">https://www.megatv.com/2025/03/10/tempi-apokalypsi-live-news-ti-vrike-i-anubis-sto-idioktito-oikopedo-pou-meteferan-ta-xomata-apo-tin-tragodia/</a>.
+                    </li>
+                    <li id="src-49"><span class="source-num">[49]</span> ‘Τραγωδία Στα Τέμπη: Κατεπείγουσα
+                        Έρευνα Για Τα «χαμένα» Βίντεο - ΤΟ ΒΗΜΑ’, <a
+                            href="https://www.tovima.gr/2024/11/18/dikaiosyni/tragodia-sta-tempi-katepeigousa-ereyna-gia-ta-vinteo/"
+                            target="_blank">https://www.tovima.gr/2024/11/18/dikaiosyni/tragodia-sta-tempi-katepeigousa-ereyna-gia-ta-vinteo/</a>.
+                    </li>
+
+                    <li id="src-50"><span class="source-num">[50]</span> ΗΜΕΡΟΔΡΟΜΟΣ, ‘Έγκλημα στα Τέμπη - Νέο
+                        συγκλονιστικό ηχητικό ντοκουμέντο: «Δεν μπορώ να αναπνεύσω»’, Ημεροδρόμος, 20 January
+                        2025, <a
+                            href="https://www.imerodromos.gr/egklima-sta-tempi-neo-sygklonistiko-ichitiko-ntokoymento-den-mporo-na-anapneyso/"
+                            target="_blank">https://www.imerodromos.gr/egklima-sta-tempi-neo-sygklonistiko-ichitiko-ntokoymento-den-mporo-na-anapneyso/</a>.
+                    </li>
+                    <li id="src-51"><span class="source-num">[51]</span> ‘Photos: Mass Protests across Greece to
+                        Seek Justice for Train Crash Victims’, Al Jazeera, <a
+                            href="https://www.aljazeera.com/gallery/2025/1/27/mass-protests-across-greece-to-demand-justice-for-tempe-train-crash-victims"
+                            target="_blank">https://www.aljazeera.com/gallery/2025/1/27/mass-protests-across-greece-to-demand-justice-for-tempe-train-crash-victims</a>.
+                    </li>
+                    <li id="src-52"><span class="source-num">[52]</span> ‘Τέμπη: Πιέσεις Από Κυβερνητικά Στελέχη
+                        Για Να Επισπευσθεί Το «μπάζωμα» Καταγγέλλουν Οι Αστυνομικοί - Ποιους «δίνουν»’,
+                        Topontiki.Gr, 30 January 2025, <a
+                            href="https://www.topontiki.gr/2025/01/30/tempi-piesis-apo-kivernitika-stelechi-gia-na-epispefsthi-to-mpazoma-katangelloun-i-astinomiki/"
+                            target="_blank">https://www.topontiki.gr/2025/01/30/tempi-piesis-apo-kivernitika-stelechi-gia-na-epispefsthi-to-mpazoma-katangelloun-i-astinomiki/</a>.
+                    </li>
+                    <li id="src-53"><span class="source-num">[53]</span> ‘Τέμπη: Πρώτη δικαστική απόφαση -
+                        Αποζημίωση 800.000 ευρώ σε συγγενείς θύματος’, euronews, 1 February 2025, <a
+                            href="http://gr.euronews.com/2025/02/01/tempi-dikastiki-apofasi-apozimiwsi-se-oikogeneia-thimatos-efthines-ose-hellenic-train"
+                            target="_blank">http://gr.euronews.com/2025/02/01/tempi-dikastiki-apofasi-apozimiwsi-se-oikogeneia-thimatos-efthines-ose-hellenic-train</a>.
+                    </li>
+                    <li id="src-54"><span class="source-num">[54]</span> ‘Αποκαλυπτικό έγγραφο για τα Τέμπη:
+                        Εδωσαν εντολή να καταστραφεί βιολογικό υλικό των θυμάτων’, ΤΑ ΝΕΑ, 29 January 2025, <a
+                            href="https://www.tanea.gr/2025/01/29/greece/eggrafo-ntokoumento-40-imeres-meta-to-dystyxima-dothike-entoli-na-katastrafei-viologiko-yliko-ton-thymaton/"
+                            target="_blank">https://www.tanea.gr/2025/01/29/greece/eggrafo-ntokoumento-40-imeres-meta-to-dystyxima-dothike-entoli-na-katastrafei-viologiko-yliko-ton-thymaton/</a>.
+                    </li>
+                    <li id="src-55"><span class="source-num">[55]</span> ‘Τα κρίσιμα ερωτήματα μετά τα βίντεο,
+                        τις καταθέσεις και τις ημερομηνίες των αρχείων’, ΕΦΣΥΝ, 17 February 2025, <a
+                            href="https://www.efsyn.gr/politiki/kybernisi/463465_ta-krisima-erotimata-meta-ta-binteo-tis-katatheseis-kai-tis-imerominies"
+                            target="_blank">https://www.efsyn.gr/politiki/kybernisi/463465_ta-krisima-erotimata-meta-ta-binteo-tis-katatheseis-kai-tis-imerominies</a>.
+                    </li>
+                    <li id="src-56"><span class="source-num">[56]</span> ‘Τέμπη: Ολόκληρη η έκθεση των
+                        πραγματογνωμόνων για τα νέα βίντεο’, Η ΚΑΘΗΜΕΡΙΝΗ, 13 February 2025, <a
+                            href="https://www.kathimerini.gr/society/563468755/tempi-olokliro-to-porisma-gia-ta-nea-vinteo/"
+                            target="_blank">https://www.kathimerini.gr/society/563468755/tempi-olokliro-to-porisma-gia-ta-nea-vinteo/</a>.
+                    </li>
+                    <li id="src-57"><span class="source-num">[57]</span> ‘Greeks Hold Mass Protests Demanding
+                        Justice after Tempi Train Tragedy’, 28 February 2025, <a
+                            href="https://www.bbc.com/news/articles/cx2gg8le1kpo"
+                            target="_blank">https://www.bbc.com/news/articles/cx2gg8le1kpo</a>.
+                    </li>
+
+                    <li id="src-58"><span class="source-num">[58]</span> ‘Χρ. Τριαντόπουλος: Υπέβαλε και
+                        επισήμως παραίτηση - «Δεν έχω τίποτα ούτε να φοβηθώ, ούτε να κρύψω»’, 4 March 2025, <a
+                            href="https://www.naftemporiki.gr/politics/1929090/chr-triantopoylos-paraitithike-kai-episimos-apo-to-vima-tis-voylis/"
+                            target="_blank">https://www.naftemporiki.gr/politics/1929090/chr-triantopoylos-paraitithike-kai-episimos-apo-to-vima-tis-voylis/</a>.
+                    </li>
+                    <li id="src-59"><span class="source-num">[59]</span> ‘Τέμπη: Εγκρίθηκε με 277 «υπέρ» μετά
+                        από την ψηφοφορία στη Βουλή η σύσταση προανακριτικής επιτροπής’, ertnews.gr, 4 March
+                        2025, <a
+                            href="https://www.ertnews.gr/eidiseis/ellada/politiki/tempi-egkrithike-me-277-yper-meta-apo-tin-psifoforia-sti-vouli-i-systasi-proanakritikis-epitropis/"
+                            target="_blank">https://www.ertnews.gr/eidiseis/ellada/politiki/tempi-egkrithike-me-277-yper-meta-apo-tin-psifoforia-sti-vouli-i-systasi-proanakritikis-epitropis/</a>.
+                    </li>
+                    <li id="src-60"><span class="source-num">[60]</span> Αλεξία Κωνσταντοπούλου, ‘Τέμπη:
+                        Ξεκίνησε η Προανακριτική για τον Χρήστο Τριαντόπουλο - Πρόεδρος ο Παναγής Καππάτος’,
+                        NewsIT, 18 March 2025, <a
+                            href="https://www.newsit.gr/politikh/tempi-ksekinise-i-proanakritiki-gia-ton-xristo-triantopoulo-proedros-o-panagis-kappatos/4334901/"
+                            target="_blank">https://www.newsit.gr/politikh/tempi-ksekinise-i-proanakritiki-gia-ton-xristo-triantopoulo-proedros-o-panagis-kappatos/4334901/</a>.
+                    </li>
+                    <li id="src-61"><span class="source-num">[61]</span> ‘Παραπομπή απευθείας στη Δικαιοσύνη
+                        ζητά ο Χρήστος Τριαντόπουλος | ΣΚΑΪ’, 18 March 2025, <a
+                            href="https://www.skai.gr/news/politics/parapompi-apeytheias-stin-dikaiosyni-zita-o-xristos-triantopoulos"
+                            target="_blank">https://www.skai.gr/news/politics/parapompi-apeytheias-stin-dikaiosyni-zita-o-xristos-triantopoulos</a>.
+                    </li>
+
+                    <li id="src-62"><span class="source-num">[62]</span> ‘Τέμπη: Ερωτήματα Για Τα Χαμένα Βίντεο
+                        - «Υπήρξαν Αλλεπάλληλες Διαγραφές Αρχείων» 2 Μέρες Μετά Το Δυστύχημα (ΒΙΝΤΕΟ) -
+                        KontraNews’, <a
+                            href="https://www.kontranews.gr/koinonia/tebi-erotimata-gia-ta-chamena-vinteo-ypirxan-allepalliles-diagrafes-archeion-2-meres-meta-to-dystychima-vinteo/"
+                            target="_blank">https://www.kontranews.gr/koinonia/tebi-erotimata-gia-ta-chamena-vinteo-ypirxan-allepalliles-diagrafes-archeion-2-meres-meta-to-dystychima-vinteo/</a>.
+                    </li>
+                    <li id="src-63"><span class="source-num">[63]</span> ‘Τέμπη: Ολοκληρώθηκαν Οι Εργασίες Της
+                        Προανακριτικής – Προτείνεται η Άσκηση Ποινικής Δίωξης Στον Χρήστο Τριαντόπουλο’, <a
+                            href="https://www.enikos.gr/politics/tebi-oloklirothikan-oi-ergasies-tis-proanakritikis-proteinetai-i-askisi-poinikis-dioxis-ston-christo-triantopoulo/2346388/"
+                            target="_blank">https://www.enikos.gr/politics/tebi-oloklirothikan-oi-ergasies-tis-proanakritikis-proteinetai-i-askisi-poinikis-dioxis-ston-christo-triantopoulo/2346388/</a>.
+                    </li>
+                    <li id="src-64"><span class="source-num">[64]</span> Newsroom, ‘Παραιτήθηκε ο Χρήστος
+                        Παπαδημητρίου από τον ΕΟΔΑΣΑΑΜ’, Η ΚΑΘΗΜΕΡΙΝΗ, 9 April 2025, <a
+                            href="https://www.kathimerini.gr/society/563554942/paraitithike-o-anaplirotis-proedros-toy-eodasaam-christos-papadimitrioy/"
+                            target="_blank">https://www.kathimerini.gr/society/563554942/paraitithike-o-anaplirotis-proedros-toy-eodasaam-christos-papadimitrioy/</a>.
+                    </li>
+                    <li id="src-65"><span class="source-num">[65]</span> ‘Τριαντόπουλος: Παραπέμφθηκε Στο
+                        Δικαστικό Συμβούλιο Με 190 Ψήφους - ΤΟ ΒΗΜΑ’, <a
+                            href="https://www.tovima.gr/2025/04/11/politics/triantopoulos-parapemfthike-sto-dikastiko-symvoulio-me-190-psifous/"
+                            target="_blank">https://www.tovima.gr/2025/04/11/politics/triantopoulos-parapemfthike-sto-dikastiko-symvoulio-me-190-psifous/</a>.
+                    </li>
+                    <li id="src-66"><span class="source-num">[66]</span> ‘Τέμπη: Στη Βουλή η δικογραφία για
+                        Καραμανλή, Σπίρτζη – Ποια διαδικασία θα ακολουθηθεί, τι σχεδιάζουν τα κόμματα’, Η
+                        ΚΑΘΗΜΕΡΙΝΗ, 30 April 2025, <a
+                            href="https://www.kathimerini.gr/politics/563588068/tempi-sti-voyli-i-dikografia-gia-karamanli-spirtzi-poia-diadikasia-tha-akoloythithei-ti-schediazoyn-ta-kommata/"
+                            target="_blank">https://www.kathimerini.gr/politics/563588068/tempi-sti-voyli-i-dikografia-gia-karamanli-spirtzi-poia-diadikasia-tha-akoloythithei-ti-schediazoyn-ta-kommata/</a>.
+                    </li>
+                    <li id="src-67"><span class="source-num">[67]</span> Βουλή: Με 154 «ναι» έγινε δεκτή η
+                        πρόταση της ΝΔ για παραπομπή Καραμανλή σε προανακριτική, Πολιτική, 19 June 2025, <a
+                            href="https://www.zougla.gr/politiki/katapsifistikan-apo-ti-vouli-oi-protaseis-peri-proanakritikon-gia-ta-tebi/"
+                            target="_blank">https://www.zougla.gr/politiki/katapsifistikan-apo-ti-vouli-oi-protaseis-peri-proanakritikon-gia-ta-tebi/</a>.
+                    </li>
+                    <li id="src-68"><span class="source-num">[68]</span> ‘Επιτροπές - Λεπτομέρειες’, Ελληνικό
+                        Κοινοβούλιο, <a
+                            href="https://www.hellenicparliament.gr/Koinovouleftikes-Epitropes/CommiteeDetailView?CommitteeId=7fa30e00-687d-4f5d-9380-b30600d2c911"
+                            target="_blank">https://www.hellenicparliament.gr/Koinovouleftikes-Epitropes/CommiteeDetailView?CommitteeId=7fa30e00-687d-4f5d-9380-b30600d2c911</a>.
+                    </li>
+                    <li id="src-69"><span class="source-num">[69]</span> ‘Μόνο Καραμανλή καλεί η Ν.Δ. στην
+                        Προανακριτική’, ΕΦΣΥΝ, 28 June 2025, <a
+                            href="https://www.efsyn.gr/politiki/boyli/477348_mono-karamanli-kalei-i-nd-stin-proanakritiki"
+                            target="_blank">https://www.efsyn.gr/politiki/boyli/477348_mono-karamanli-kalei-i-nd-stin-proanakritiki</a>.
+                    </li>
+                    <li id="src-70"><span class="source-num">[70]</span> Capital.gr, ‘Προανακριτική για τα
+                        Τέμπη: Υπόμνημα κατέθεσε ο Κ. Αχ. Καραμανλής’, Capital.gr, <a
+                            href="https://www.capital.gr/politiki/3930859/proanakritiki-gia-ta-tempi-upomnima-katethese-o-k-ax-karamanlis/"
+                            target="_blank">https://www.capital.gr/politiki/3930859/proanakritiki-gia-ta-tempi-upomnima-katethese-o-k-ax-karamanlis/</a>.
+                    </li>
+                    <li id="src-71"><span class="source-num">[71]</span> ‘Τέμπη – Προανακριτική: Παραπομπή
+                        Καραμανλή Για Παράβαση Καθήκοντος Ζητά η ΝΔ – Τι Λέει Το Πόρισμα | Η ΚΑΘΗΜΕΡΙΝΗ’, <a
+                            href="https://www.kathimerini.gr/politics/563719840/tempi-proanakritiki-parapompi-karamanli-gia-paravasi-kathikontos-zita-i-nd-ti-leei-to-porisma/"
+                            target="_blank">https://www.kathimerini.gr/politics/563719840/tempi-proanakritiki-parapompi-karamanli-gia-paravasi-kathikontos-zita-i-nd-ti-leei-to-porisma/</a>.
+                    </li>
+                    <li id="src-72"><span class="source-num">[72]</span> ‘Τέμπη: Παραπέμπεται Στο Δικαστικό
+                        Συμβούλιο ο Κώστας Αχ. Καραμανλής Με 157... | Ελλάδα Ειδήσεις’, <a
+                            href="https://www.thetoc.gr/koinwnia/article/tempi-parapempetai-sto-dikastiko-sumboulio-o-kostas-ax-karamanlis/"
+                            target="_blank">https://www.thetoc.gr/koinwnia/article/tempi-parapempetai-sto-dikastiko-sumboulio-o-kostas-ax-karamanlis/</a>.
+                    </li>
+                    <li id="src-73"><span class="source-num">[73]</span> ‘Τέμπη: Λείπουν Δευτερόλεπτα Από Το
+                        Βίντεο Της Εμπορικής Αμαξοστοιχίας - Νέες Αποκαλύψεις Για Την Εθνική Τραγωδία’, <a
+                            href="https://www.newsit.gr/ellada/tempi-leipoun-deyterolepta-apo-to-vinteo-tis-emporikis-amaksostoixias-nees-apokalypseis-gia-tin-ethniki-tragodia/4297598/"
+                            target="_blank">https://www.newsit.gr/ellada/tempi-leipoun-deyterolepta-apo-to-vinteo-tis-emporikis-amaksostoixias-nees-apokalypseis-gia-tin-ethniki-tragodia/4297598/</a>.
+                    </li>
+                    <li id="src-74"><span class="source-num">[74]</span> ‘Tο Πόρισμα της Επιτροπής
+                        Εμπειρογνωμόνων για τη διερεύνηση και ανάδειξη των συστημικών προβλημάτων και
+                        δυσλειτουργιών αναφορικά με το σιδηροδρομικό δυστύχημα με πυρκαγιά που έλαβε χώρα στις
+                        28-02-2023 στην είσοδο της κοιλάδας των Τεμπών’, yme.gov.gr, <a
+                            href="https://www.yme.gr/2013-01-31-06-37-23/2013-01-31-07-00-49/item/11150-to-porisma-tis-epitropis-empeirognomonon-gia-ti-diereynisi-kai-anadeiksi-ton-systimikon-provlimaton-kai-dysleitourgion-anaforika-me-to-sidirodromiko-dystyxima-me-pyrkagia-pou-elave-xora-stis-28-02-2023-stin-eisodo-tis-koiladas-ton-tempon"
+                            target="_blank">https://www.yme.gr/2013-01-31-06-37-23/2013-01-31-07-00-49/item/11150-to-porisma-tis-epitropis-empeirognomonon-gia-ti-diereynisi-kai-anadeiksi-ton-systimikon-provlimaton-kai-dysleitourgion-anaforika-me-to-sidirodromiko-dystyxima-me-pyrkagia-pou-elave-xora-stis-28-02-2023-stin-eisodo-tis-koiladas-ton-tempon</a>.
+                    </li>
+                    <li id="src-75"><span class="source-num">[75]</span> Βασίλειος Κοκοτσάκης et al., Συγκρουση
+                        Τρένων Κινούμενων Αντίθετα Στην Ίδια Σταθερή Γραμμή. Επικαροποιημένη Τεχνική Έκθεση
+                        (2024), <a
+                            href="https://media.ellinikahoaxes.gr/uploads/2024/06/%CE%95%CE%A0%CE%99%CE%9A%CE%91%CE%99%CE%A1%CE%9F%CE%A0%CE%9F%CE%99%CE%97%CE%9C%CE%95%CE%9D%CE%97-%CE%95%CE%9A%CE%98%CE%95%CE%A3%CE%97-%CE%A4%CE%95%CE%A7%CE%9D%CE%99%CE%9A%CE%9F%CE%A5-%CE%A3%CE%A5%CE%9C%CE%92%CE%9F%CE%A5%CE%9B%CE%9F%CE%A5-1-15-5-2024-1.pdf"
+                            target="_blank">https://media.ellinikahoaxes.gr/uploads/2024/06/15-5-2024-1.pdf</a>.
+                    </li>
+                    <li id="src-76"><span class="source-num">[76]</span> Γιάννης Σουλιώτης, ‘Τέμπη: Ευθύνες σε
+                        σταθμάρχη, μηχανοδηγό και ΟΣΕ’, Η ΚΑΘΗΜΕΡΙΝΗ, 21 June 2023, <a
+                            href="https://www.kathimerini.gr/society/562480918/tempi-eythynes-se-stathmarchi-michanodigo-kai-ose/"
+                            target="_blank">https://www.kathimerini.gr/society/562480918/tempi-eythynes-se-stathmarchi-michanodigo-kai-ose/</a>.
+                    </li>
+                    <li id="src-77"><span class="source-num">[77]</span> ‘Κόλαφος για την κυβέρνηση Μητσοτάκη
+                        και το νέο πόρισμα για την τραγωδία στα Τέμπη - Documento’, 17 July 2023, <a
+                            href="https://www.documentonews.gr/article/kolafos-gia-tin-kyvernisi-mitsotaki-kai-to-neo-porisma-gia-tin-tragodia-sta-tempi/"
+                            target="_blank">https://www.documentonews.gr/article/kolafos-gia-tin-kyvernisi-mitsotaki-kai-to-neo-porisma-gia-tin-tragodia-sta-tempi/</a>.
+                    </li>
+                    <li id="src-78"><span class="source-num">[78]</span> Στυλιανός Καλαμούκας and Νικόλαος
+                        Καλαμούκας, Έκθεση Πραγματογνωμοσύνης: Διερεύνηση Των Συνθηκών Τέλεσης Του Πολύνεκρου
+                        Τροχαίου Δυστυχήματος... (Kakamoukas Technical Expert Office / Stylianos Sourlas &
+                        Associates Law Office, 2023), <a
+                            href="https://www.protothema.gr/files/2025-04-04/%CF%84%CE%B5%CF%87%CE%BD%CE%B9%CE%BA%CE%B7_%CE%B5%CE%BA%CE%B8%CE%B5%CF%83%CE%B7_%CE%B1%CF%80%CE%BF_%CE%BA%CE%B1%CE%BA%CE%B1%CE%BC%CE%BF%CF%85%CE%BA%CE%B1__250404_125259__1_.pdf"
+                            target="_blank">https://www.protothema.gr/files/2025-04-04/1_.pdf</a>.
+                    </li>
+                    <li id="src-79"><span class="source-num">[79]</span> Δεδές Αναστάσιος, Έκθεση Τεχνικού
+                        Συμβούλου: Διερεύνηση Σιδηροδρομικού Δυστυχήματος Που Έλαβε Χώρα Στις 28/02/2023 Στην
+                        Περιοχή Του Ευαγγελισμού Τεμπών Λάρισας (2024), <a
+                            href="https://www.powergame.gr/wp-content/uploads/2025/04/ekthesi-dede-tempi_compressed.pdf"
+                            target="_blank">https://www.powergame.gr/wp-content/uploads/2025/04/ekthesi-dede-tempi_compressed.pdf</a>.
+                    </li>
+                    <li id="src-80"><span class="source-num">[80]</span> Jowett, Paul, Έκθεση Του Δρα. Paul
+                        Jowett Σχετικά Με Την Πρόκληση Και Εξάπλωση Πυρκαγιάς Που Προέκυψε Από Σιδηροδρομικό
+                        Ατύχημα Κοντά Στον Ευαγγελισμό Της Λάρισας Στις 28 Φεβρουαρίου 2023, 713172/PAJ
+                        (Burgoynes, 2024), <a href="https://www.protothema.gr/files/2025-03-28/jowett-tempi.pdf"
+                            target="_blank">https://www.protothema.gr/files/2025-03-28/jowett-tempi.pdf</a>.
+                    </li>
+                    <li id="src-81"><span class="source-num">[81]</span> ‘Τέμπη: Οι εκρηκτικές ουσίες και οι
+                        καταγγελίες για παρεμβάσεις στο σημείο του δυστυχήματος’, ΕΘΝΟΣ, 23 February 2024, <a
+                            href="https://www.ethnos.gr/greece/article/303184/temphoiekrhktikesoysieskaioikataggeliesgiaparembaseisstoshmeiotoydystyxhmatos"
+                            target="_blank">https://www.ethnos.gr/greece/article/303184/temphoiekrhktikesoysieskaioikataggeliesgiaparembaseisstoshmeiotoydystyxhmatos</a>.
+                    </li>
+                    <li id="src-82"><span class="source-num">[82]</span> ‘Τέμπη: Πόρισμα - καταπέλτης των
+                        Εμπειρογνωμόνων των οικογενειών - «Χωρίς τη φωτιά οι νεκροί θα ήταν λιγότεροι»’, ΕΘΝΟΣ,
+                        26 February 2024, <a
+                            href="https://www.ethnos.gr/greece/article/303680/temphporismakatapelthstonempeirognomonontonoikogeneionxoristhfotiaoinekroithahtanligoteroi"
+                            target="_blank">https://www.ethnos.gr/greece/article/303680/temphporismakatapelthstonempeirognomonontonoikogeneionxoristhfotiaoinekroithahtanligoteroi</a>.
+                    </li>
+                    <li id="src-83"><span class="source-num">[83]</span> ‘Πόρισμα Κοκοτσάκη: Τα πάντα
+                        αλλοιώθηκαν - 30 άνθρωποι πέθαναν από εύφλεκτα υγρά’, ΕΦΣΥΝ, 20 January 2025, <a
+                            href="https://www.efsyn.gr/ellada/dikaiosyni/460368_porisma-kokotsaki-ta-panta-alloiothikan-30-anthropoi-pethanan-apo-eyflekta"
+                            target="_blank">https://www.efsyn.gr/ellada/dikaiosyni/460368_porisma-kokotsaki-ta-panta-alloiothikan-30-anthropoi-pethanan-apo-eyflekta</a>.
+                    </li>
+                    <li id="src-84"><span class="source-num">[84]</span> Βασίλειος Κοκοτσάκης et al., ‘Έκθεση
+                        Σχετικά Με Τον Ακριβή Αριθμό Των Θανόντων Από Την Ακαριαία Ανάφλεξη Εκρηκτικού
+                        Μίγματος...’, 30 January 2025, <a
+                            href="https://parallaximag.gr/wp-content/uploads/2025/01/%CE%95%CE%9A%CE%98%CE%95%CE%A3%CE%97-%CE%9A%CE%9F%CE%9A%CE%9F%CE%A4%CE%A3%CE%91%CE%9A%CE%97.pdf"
+                            target="_blank">https://parallaximag.gr/wp-content/uploads/2025/01/%CE%95%CE%9A%CE%98%CE%95%CE%A3%CE%97-%CE%9A%CE%9F%CE%9A%CE%9F%CE%A4%CE%A3%CE%91%CE%9A%CE%97.pdf</a>.
+                    </li>
+                    <li id="src-85"><span class="source-num">[85]</span> ‘Πόρισμα Hellenic Train Για Τέμπη: «Η
+                        Έκρηξη Και η Πυρκαγιά Ήταν Μια Ατυχής Σύμπτωση» | Έθνος’, <a
+                            href="https://www.ethnos.gr/greece/article/355472/porismahellenictraingiatemphhekrhxhkaihpyrkagiahtanmiaatyxhssymptosh"
+                            target="_blank">https://www.ethnos.gr/greece/article/355472/porismahellenictraingiatemphhekrhxhkaihpyrkagiahtanmiaatyxhssymptosh</a>.
+                    </li>
+                    <li id="src-86"><span class="source-num">[86]</span> Tvxs Newsroom, ‘Τέμπη-ΕΟΔΑΣΑΑΜ /
+                        Αφαιρείται και επισήμως από το πόρισμα η αναφορά στην πυρόσφαιρα’, tvxs.gr, 7 April
+                        2025, <a
+                            href="https://tvxs.gr/news/ellada/tempi-eodasaam-afaireitai-kai-episimos-apo-to-porisma-i-anafora-stin-pyrorfaira/"
+                            target="_blank">https://tvxs.gr/news/ellada/tempi-eodasaam-afaireitai-kai-episimos-apo-to-porisma-i-anafora-stin-pyrorfaira/</a>.
+                    </li>
+                    <li id="src-87"><span class="source-num">[87]</span> Πέτρος Τσακιρίδης, Έκθεση
+                        Προπαταρκτικής Πραγματογνωμοσύνης (Εθνικό Μετσόβιο Πολυτεχνείο, 2025).</li>
+                    <li id="src-88"><span class="source-num">[88]</span> Δημήτριος Καρώνης, Πραγματογνωμοσύνη σε
+                        απάντηση της Διάταξης Διορισμού 4/2024 (Αριθμός Δικογραφίας Φ2023/49α’(ΕΦ4-23/3)) από
+                        τον Εφέτη Ανακριτή Λάρισσας κ. Σωτήριο Μπακαΐμη (Αθήνα, 2025).</li>
+                    <li id="src-89"><span class="source-num">[89]</span> ‘Eικόνες από το «μπάζωμα» μόνο λίγες
+                        ώρες μετά την τραγωδία’, ΕΦΣΥΝ, 30 May 2024, <a
+                            href="https://www.efsyn.gr/ellada/koinonia/434669_eikones-apo-mpazoma-mono-liges-ores-meta-tin-tragodia"
+                            target="_blank">https://www.efsyn.gr/ellada/koinonia/434669_eikones-apo-mpazoma-mono-liges-ores-meta-tin-tragodia</a>.
+                    </li>
+                    <li id="src-90"><span class="source-num">[90]</span> ΤΕΜΠΗ - 872 Ημέρες Μετά…., directed by
+                        Αντιθέσεις στην ΚΡΗΤΗ TV, 2025, 02:26:19, <a href="https://www.youtube.com/watch?v=qYcSQbdsB8o"
+                            target="_blank">https://www.youtube.com/watch?v=qYcSQbdsB8o</a>.
+                    </li>
+                    <li id="src-91"><span class="source-num">[91]</span> ‘Τέμπη - ΔΑΕΕ: Δεν υπάρχουν ίχνη καύσης
+                        στην καμπίνα της δεύτερης ηλεκτράμαξας της εμπορικής - Παραδόθηκε το πόρισμα’, Λάρισα,
+                        larissanet.gr, 28 August 2025, <a
+                            href="https://www.larissanet.gr/2025/08/28/tempi-daee-den-yparchoun-ichni-kafsis-stin-kampina-tis-defteris-ilektramaxas-tis-emporikis-paradothike-to-porisma/"
+                            target="_blank">https://www.larissanet.gr/2025/08/28/tempi-daee-den-yparchoun-ichni-kafsis-stin-kampina-tis-defteris-ilektramaxas-tis-emporikis-paradothike-to-porisma/</a>.
+                    </li>
+                    <li id="src-92"><span class="source-num">[92]</span> Ελπίδα Κουτσογιάννη, ‘Τέμπη: Αυτές
+                        είναι οι εκθέσεις του Χημείου του κράτους για το ξυλόλιο και το τολουόλιο - Dnews’, 2
+                        September 2025, <a
+                            href="https://www.dnews.gr/eidhseis/ellada/543643/tempi-aftes-einai-oi-ektheseis-tou-ximeiou-tou-kratous-gia-to-ksylolio-kai-to-tolouolio"
+                            target="_blank">https://www.dnews.gr/eidhseis/ellada/543643/tempi-aftes-einai-oi-ektheseis-tou-ximeiou-tou-kratous-gia-to-ksylolio-kai-to-tolouolio</a>.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            function openMainTab(id, btn) {
+                document.querySelectorAll('.tab-view').forEach(d => d.classList.remove('active'));
+                document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                if (btn) {
+                    btn.classList.add('active');
+                } else {
+                    const index = id === 'timeline' ? 0 : 1;
+                    document.querySelectorAll('.main-tab-btn')[index].classList.add('active');
+                }
+            }
+
+            function openSubTab(index, btn) {
+                document.querySelectorAll('.timeline-section').forEach(d => d.classList.remove('active'));
+                document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById('sec-' + index).classList.add('active');
+                btn.classList.add('active');
+            }
+
+            function goToSource(id) {
+                openMainTab('sources', null);
+                setTimeout(() => {
+                    const el = document.getElementById('src-' + id);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.style.backgroundColor = '#fff3cd';
+                        el.style.transition = 'background-color 0.5s';
+                        setTimeout(() => { el.style.backgroundColor = 'transparent'; }, 2000);
+                    }
+                }, 50);
+            }
+
+            function filterContent() {
+                let input = document.getElementById('searchInput').value.toLowerCase();
+                let rows = document.querySelectorAll('.timeline-row');
+                rows.forEach(row => {
+                    let text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(input) ? "flex" : "none";
+                });
+                let sources = document.querySelectorAll('.sources-list li');
+                sources.forEach(li => {
+                    let text = li.innerText.toLowerCase();
+                    li.style.display = text.includes(input) ? "block" : "none";
+                });
+            }
+        </script>
+
+</body>
+
+</html>
